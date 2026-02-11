@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bingo Product Selector</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: #FDFDFD;
+    color: #0A2A5A;
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #0A2A5A;
+    font-weight: 700;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  @media (min-width: 768px) {
+    .grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    border-top: 4px solid #0A2A5A;
+  }
+
+  .card h2 {
+    margin-top: 0;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    color: #0A2A5A;
+    font-weight: 600;
+  }
+
+  .item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    font-size: 16px;
+  }
+
+  .counter button {
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+    font-weight: 700;
+    border-radius: 10px;
+    border: none;
+    background: #E8EAF0;
+    color: #0A2A5A;
+    cursor: pointer;
+  }
+
+  .counter button:active {
+    transform: scale(0.95);
+  }
+
+  .counter input {
+    width: 60px;
+    height: 48px;
+    font-size: 20px;
+    text-align: center;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #fafafa;
+    color: #0A2A5A;
+  }
+
+  .summary {
+    text-align: center;
+  }
+
+  .total {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    color: #0A2A5A;
+  }
+
+  .summary button {
+    margin: 6px 0;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    width: 100%;
+  }
+
+  .primary {
+    background: #0A2A5A;
+    color: white;
+  }
+
+  .primary:hover {
+    background: #092347;
+  }
+
+  .danger {
+    background: #C0392B;
+    color: white;
+  }
+
+  .neutral {
+    background: #7F8C8D;
+    color: white;
+  }
+
+  .stats-box {
+    margin-top: 15px;
+    font-size: 14px;
+    background: #F8F9FA;
+    padding: 12px;
+    border-radius: 8px;
+    color: #0A2A5A;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+</style>
+</head>
+<body>
+
+<h1>Bingo Product Selector</h1>
+
+<div class="grid">
+
+  <div class="card">
+    <h2>Games</h2>
+    <div class="item"><span>Single ($15)</span><div class="counter"><button onclick="changeValue('single', -1)">−</button><input id="single" value="0" readonly><button onclick="changeValue('single', 1)">+</button></div></div>
+    <div class="item"><span>Second ($10)</span><div class="counter"><button onclick="changeValue('second', -1)">−</button><input id="second" value="0" readonly><button onclick="changeValue('second', 1)">+</button></div></div>
+    <div class="item"><span>Progressive - Single ($1)</span><div class="counter"><button onclick="changeValue('progressiveSingle', -1)">−</button><input id="progressiveSingle" value="0" readonly><button onclick="changeValue('progressiveSingle', 1)">+</button></div></div>
+    <div class="item"><span>Progressive - 6 for $5</span><div class="counter"><button onclick="changeValue('progressiveBundle', -1)">−</button><input id="progressiveBundle" value="0" readonly><button onclick="changeValue('progressiveBundle', 1)">+</button></div></div>
+  </div>
+
+  <div class="card">
+    <h2>Dabbers</h2>
+    <div class="item"><span>Standard ($1)</span><div class="counter"><button onclick="changeValue('standardDabber', -1)">−</button><input id="standardDabber" value="0" readonly><button onclick="changeValue('standardDabber', 1)">+</button></div></div>
+    <div class="item"><span>Special ($2)</span><div class="counter"><button onclick="changeValue('specialDabber', -1)">−</button><input id="specialDabber" value="0" readonly><button onclick="changeValue('specialDabber', 1)">+</button></div></div>
+  </div>
+
+  <div class="card">
+    <h2>Extras</h2>
+    <div class="item"><span>Early Birds ($7)</span><div class="counter"><button onclick="changeValue('earlyBirds', -1)">−</button><input id="earlyBirds" value="0" readonly><button onclick="changeValue('earlyBirds', 1)">+</button></div></div>
+    <div class="item"><span>Speed Single ($1)</span><div class="counter"><button onclick="changeValue('speedSingle', -1)">−</button><input id="speedSingle" value="0" readonly><button onclick="changeValue('speedSingle', 1)">+</button></div></div>
+    <div class="item"><span>Speed 6 for $5</span><div class="counter"><button onclick="changeValue('speedBundle', -1)">−</button><input id="speedBundle" value="0" readonly><button onclick="changeValue('speedBundle', 1)">+</button></div></div>
+    <div class="item"><span>Late Birds ($7)</span><div class="counter"><button onclick="changeValue('lateBirds', -1)">−</button><input id="lateBirds" value="0" readonly><button onclick="changeValue('lateBirds', 1)">+</button></div></div>
+  </div>
+
+  <div class="card summary">
+    <div class="total">Total: $<span id="totalAmount">0.00</span></div>
+
+    <button class="primary" onclick="completeSale()">Complete Sale</button>
+    <button class="neutral" onclick="showStats()">Show Stats</button>
+    <button class="danger" onclick="confirmResetTotals()">Reset Totals</button>
+
+    <div id="statsDisplay" class="stats-box" style="display:none;"></div>
+  </div>
+
+</div>
+
+<script>
+function getValue(id){ return parseInt(document.getElementById(id).value)||0;}
+
+function changeValue(id,delta){
+  let input=document.getElementById(id);
+  let value=getValue(id)+delta;
+  if(value<0)value=0;
+  input.value=value;
+  calculateTotal();
+}
+
+function calculateTotal(){
+  let total=0;
+  total+=getValue("single")*15;
+  total+=getValue("second")*10;
+  total+=getValue("progressiveSingle")*1;
+  total+=getValue("progressiveBundle")*5;
+  total+=getValue("standardDabber")*1;
+  total+=getValue("specialDabber")*2;
+  total+=getValue("earlyBirds")*7;
+  total+=getValue("speedSingle")*1;
+  total+=getValue("speedBundle")*5;
+  total+=getValue("lateBirds")*7;
+  document.getElementById("totalAmount").innerText=total.toFixed(2);
+  return total;
+}
+
+function getTotalItems(){
+  let inputs=document.querySelectorAll("input");
+  let sum=0;
+  inputs.forEach(i=>sum+=parseInt(i.value)||0);
+  return sum;
+}
+
+function setCookie(name,value,days){
+  let d=new Date();
+  d.setTime(d.getTime()+(days*24*60*60*1000));
+  document.cookie=name+"="+value+";expires="+d.toUTCString()+";path=/";
+}
+
+function getCookie(name){
+  let match=document.cookie.match(new RegExp('(^| )'+name+'=([^;]+)'));
+  return match?match[2]:null;
+}
+
+function completeSale(){
+  let total=calculateTotal();
+  let items=getTotalItems();
+  if(total===0)return;
+
+  let revenue=parseFloat(getCookie("revenue")||0);
+  let totalItems=parseInt(getCookie("items")||0);
+  let orders=parseInt(getCookie("orders")||0);
+
+  revenue+=total;
+  totalItems+=items;
+  orders+=1;
+
+  setCookie("revenue",revenue,7);
+  setCookie("items",totalItems,7);
+  setCookie("orders",orders,7);
+
+  resetForm();
+}
+
+function showStats(){
+  let revenue=parseFloat(getCookie("revenue")||0);
+  let items=parseInt(getCookie("items")||0);
+  let orders=parseInt(getCookie("orders")||0);
+
+  let avgOrder=orders? (revenue/orders):0;
+  let avgItem=items? (revenue/items):0;
+
+  let box=document.getElementById("statsDisplay");
+  box.style.display="block";
+  box.innerHTML=
+    "Total Revenue: $"+revenue.toFixed(2)+"<br>"+
+    "Total Items Sold: "+items+"<br>"+
+    "Orders: "+orders+"<br>"+
+    "Avg Order Size: $"+avgOrder.toFixed(2)+"<br>"+
+    "Avg Item Price: $"+avgItem.toFixed(2);
+}
+
+function confirmResetTotals(){
+  let input=prompt("Type 'bingo' to reset totals:");
+  if(input==="bingo"){
+    setCookie("revenue",0,7);
+    setCookie("items",0,7);
+    setCookie("orders",0,7);
+    alert("Totals reset.");
+  }else{
+    alert("Incorrect confirmation.");
+  }
+}
+
+function clearCookies(){
+  document.cookie="revenue=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;";
+  document.cookie="items=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;";
+  document.cookie="orders=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;";
+  //alert("All cookies cleared.");
+}
+
+function resetForm(){
+  document.querySelectorAll("input").forEach(i=>i.value=0);
+  calculateTotal();
+}
+</script>
+
+</body>
+</html>
