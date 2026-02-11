@@ -138,6 +138,26 @@
     border: 1px solid #ddd;
     text-align: left;
   }
+  .summary {
+  position: relative; /* allows corner positioning */
+}
+
+.clear-btn {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #f4f4f4;
+  color: #0A2A5A;
+  cursor: pointer;
+}
+
+.clear-btn:hover {
+  background: #e9e9e9;
+}
 </style>
 </head>
 <body>
@@ -176,6 +196,7 @@
     <button class="danger" onclick="confirmResetTotals()">Reset Totals</button>
 
     <div id="statsDisplay" class="stats-box" style="display:none;"></div>
+    <button class="clear-btn" onclick="resetForm()">Clear Form</button>
   </div>
 
 </div>
