@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -181,7 +182,7 @@
     <div class="item"><span>Special ($2)</span><div class="counter"><button onclick="changeValue('specialDabber', -1)">−</button><input id="specialDabber" value="0" readonly><button onclick="changeValue('specialDabber', 1)">+</button></div></div>
     <h2>Packs</h2>
     <div class="item"><span>Single Pack ($15)</span><div class="counter"><button onclick="changeValue('singlePack', -1)">−</button><input id="singlePack" value="0" readonly><button onclick="changeValue('singlePack', 1)">+</button></div></div>
-    <div class="item"><span>Double Pack ($20)</span><div class="counter"><button onclick="changeValue('doublePack', -1)">−</button><input id="doublePack" value="0" readonly><button onclick="changeValue('doublePack', 1)">+</button></div></div>
+    <div class="item"><span>Extra Pack ($26)</span><div class="counter"><button onclick="changeValue('doublePack', -1)">−</button><input id="doublePack" value="0" readonly><button onclick="changeValue('doublePack', 1)">+</button></div></div>
   </div>
 
   <div class="card">
@@ -229,7 +230,7 @@ function calculateTotal(){
   total+=getValue("speedBundle")*5;
   total+=getValue("lateBirds")*7;
   total+=getValue("singlePack")*31;
-  total+=getValue("doublePack")*57;
+  total+=getValue("doublePack")*26;
   document.getElementById("totalAmount").innerText=total.toFixed(2);
   return total;
 }
@@ -241,15 +242,13 @@ function getTotalItems(){
   return sum;
 }
 
-function setCookie(name,value,days){
-  let d=new Date();
-  d.setTime(d.getTime()+(days*24*60*60*1000));
-  document.cookie=name+"="+value+";expires="+d.toUTCString()+";path=/";
+// use localStorage for persistence (works with file:// and http)
+function setCookie(name,value){
+  localStorage.setItem(name, value);
 }
 
 function getCookie(name){
-  let match=document.cookie.match(new RegExp('(^| )'+name+'=([^;]+)'));
-  return match?match[2]:null;
+  return localStorage.getItem(name);
 }
 
 function completeSale(){
@@ -265,9 +264,17 @@ function completeSale(){
   totalItems+=items;
   orders+=1;
 
-  setCookie("revenue",revenue,7);
-  setCookie("items",totalItems,7);
-  setCookie("orders",orders,7);
+  setCookie("revenue",revenue);
+  setCookie("items",totalItems);
+  setCookie("orders",orders);
+
+  // Track individual items
+  let itemTypes=["single","second","progressiveSingle","progressiveBundle","standardDabber","specialDabber","earlyBirds","speedSingle","speedBundle","lateBirds","singlePack","doublePack"];
+  itemTypes.forEach(type=>{
+    let count=parseInt(getCookie(type+"_count")||0);
+    count+=getValue(type);
+    setCookie(type+"_count",count);
+  });
 
   resetForm();
 }
@@ -277,25 +284,48 @@ function showStats(){
   let items=parseInt(getCookie("items")||0);
   let orders=parseInt(getCookie("orders")||0);
 
-  let avgOrder=orders? (revenue/orders):0;
-  let avgItem=items? (revenue/items):0;
+  let itemLabels={
+    "single":"Single",
+    "second":"Second",
+    "progressiveSingle":"Progressive - Single",
+    "progressiveBundle":"Progressive - Bundle",
+    "standardDabber":"Standard Dabber",
+    "specialDabber":"Special Dabber",
+    "earlyBirds":"Early Birds",
+    "speedSingle":"Speed Single",
+    "speedBundle":"Speed Bundle",
+    "lateBirds":"Late Birds",
+    "singlePack":"Single Pack",
+    "doublePack":"Extra Pack"
+  };
 
   let box=document.getElementById("statsDisplay");
   box.style.display="block";
-  box.innerHTML=
-    "Total Revenue: $"+revenue.toFixed(2)+"<br>"+
+  let html="Total Revenue: $"+revenue.toFixed(2)+"<br>"+
     "Total Items Sold: "+items+"<br>"+
-    "Orders: "+orders+"<br>"+
-    "Avg Order Size: $"+avgOrder.toFixed(2)+"<br>"+
-    "Avg Item Price: $"+avgItem.toFixed(2);
+    "Orders: "+orders+"<br><br>"+
+    "<strong>Breakdown by Item:</strong><br>";
+
+  let itemTypes=["single","second","progressiveSingle","progressiveBundle","standardDabber","specialDabber","earlyBirds","speedSingle","speedBundle","lateBirds","singlePack","doublePack"];
+  itemTypes.forEach(type=>{
+    let count=parseInt(getCookie(type+"_count")||0);
+    html+=itemLabels[type]+": "+count+"<br>";
+  });
+
+  box.innerHTML=html;
 }
 
 function confirmResetTotals(){
   let input=prompt("Type 'bingo' to reset totals:");
   if(input==="bingo"){
-    setCookie("revenue",0,7);
-    setCookie("items",0,7);
-    setCookie("orders",0,7);
+    setCookie("revenue",0);
+    setCookie("items",0);
+    setCookie("orders",0);
+    // Reset individual item counters
+    let itemTypes=["single","second","progressiveSingle","progressiveBundle","standardDabber","specialDabber","earlyBirds","speedSingle","speedBundle","lateBirds","singlePack","doublePack"];
+    itemTypes.forEach(type=>{
+      setCookie(type+"_count",0);
+    });
     alert("Totals reset.");
   }else{
     alert("Incorrect confirmation.");
